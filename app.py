@@ -65,13 +65,13 @@ def processRequest(req):
         results = urllib.urlopen(url).read()
         data = json.loads(results)
         print(data)
-        res = makeWebhookResultList(data)
+        res = makeWebhookResultList(constrains, data)
         return res
     else:
         return {}
 
-def makeWebhookResultList(data):
-    speech = "The total number of accounts is  " + str(data)
+def makeWebhookResultList(constrains, data):
+    speech = constrains + " accounts are listed here: " + str(data)
     print("Response:")
     print(speech)
     return {
@@ -79,8 +79,8 @@ def makeWebhookResultList(data):
         "displayText": speech,
         "source": "api-ai-webhook-sample"
     }
-def makeWebhookResultNumber(length):
-    speech = "The total number of accounts is  " + str(length)
+def makeWebhookResultNumber(constrains, length):
+    speech = "The total number of "+ constrains + " accounts is  " + str(length)
     print("Response:")
     print(speech)
     return {
