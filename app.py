@@ -23,18 +23,63 @@ def webhook():
     return r
 
 def processRequest(req):
-    if req.get("result").get("action") != "getTotalNumber":
+    # number
+    if req.get("result").get("action") == "getAccountNumber":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        constrains = parameters.get("constrains")
+        if constrains == "" or constrains == "all":
+            url = "https://nyu-bank-system.mybluemix.net/accounts"
+        elif constrains == "active":
+            url = "https://nyu-bank-system.mybluemix.net/accounts?active=true"
+        elif constrains == "inactive":
+            url = "https://nyu-bank-system.mybluemix.net/accounts?active=false"
+        elif constrains.indexOf("type") != -1:
+            typeNum = constrains.substring(5,6)
+            if typeNum == 0 or typeNum == 1 or typeNum == 2 or typeNum == 3:
+                url = "https://nyu-bank-system.mybluemix.net/accounts?type=" + typeNum
+        else:
+            return {}
+        results = urllib.urlopen(url).read()
+        data = json.loads(results)
+        print(len(data))
+        res = makeWebhookResultNumber(len(data))
+        return res
+    # list
+    elif req.get("result").get("action") == "listAccounts":
+        result = req.get("result")
+        parameters = result.get("parameters")
+        constrains = parameters.get("constrains")
+        if constrains == "" or constrains == "all":
+            url = "https://nyu-bank-system.mybluemix.net/accounts"
+        elif constrains == "active":
+            url = "https://nyu-bank-system.mybluemix.net/accounts?active=true"
+        elif constrains == "inactive":
+            url = "https://nyu-bank-system.mybluemix.net/accounts?active=false"
+        elif constrains.indexOf("type") != -1:
+            typeNum = constrains.substring(5,6)
+            if typeNum == 0 or typeNum == 1 or typeNum == 2 or typeNum == 3:
+                url = "https://nyu-bank-system.mybluemix.net/accounts?type=" + typeNum
+        else:
+            return {}
+        results = urllib.urlopen(url).read()
+        data = json.loads(results)
+        print(data)
+        res = makeWebhookResultList(data)
+        return res
+    else:
         return {}
-    result = req.get("result")
-    parameters = result.get("parameters")
-    url = "https://nyu-bank-system.mybluemix.net/accounts"
-    results = urllib.urlopen(url).read()
-    data = json.loads(results)
-    print(len(data))
-    res = makeWebhookResult(len(data))
-    return res
 
-def makeWebhookResult(length):
+def makeWebhookResultList(data):
+    speech = "The total number of accounts is  " + str(data)
+    print("Response:")
+    print(speech)
+    return {
+        "speech": speech,
+        "displayText": speech,
+        "source": "api-ai-webhook-sample"
+    }
+def makeWebhookResultNumber(length):
     speech = "The total number of accounts is  " + str(length)
     print("Response:")
     print(speech)
