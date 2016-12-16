@@ -34,8 +34,8 @@ def processRequest(req):
             url = "https://nyu-bank-system.mybluemix.net/accounts?active=true"
         elif constrains == "inactive":
             url = "https://nyu-bank-system.mybluemix.net/accounts?active=false"
-        elif constrains.indexOf("type") != -1:
-            typeNum = constrains.substring(5,6)
+        elif if "type" in constrains:
+            typeNum = constrains[5:6]
             if typeNum == 0 or typeNum == 1 or typeNum == 2 or typeNum == 3:
                 url = "https://nyu-bank-system.mybluemix.net/accounts?type=" + typeNum
         else:
@@ -56,8 +56,8 @@ def processRequest(req):
             url = "https://nyu-bank-system.mybluemix.net/accounts?active=true"
         elif constrains == "inactive":
             url = "https://nyu-bank-system.mybluemix.net/accounts?active=false"
-        elif constrains.indexOf("type") != -1:
-            typeNum = constrains.substring(5,6)
+        elif if "type" in constrains:
+            typeNum = constrains[5:6]
             if typeNum == 0 or typeNum == 1 or typeNum == 2 or typeNum == 3:
                 url = "https://nyu-bank-system.mybluemix.net/accounts?type=" + typeNum
         else:
